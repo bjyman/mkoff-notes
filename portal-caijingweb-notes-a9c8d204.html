@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>彩经网 · 信息概览</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: #f4f6fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 0 24px;
+        }
+
+        .page-wrapper {
+            max-width: 1120px;
+            width: 100%;
+        }
+
+        /* ---------- 深色头图 ---------- */
+        .hero {
+            background: linear-gradient(145deg, #0d1b2a 0%, #1b2a41 85%);
+            color: #e4eaf3;
+            border-radius: 0 0 40px 40px;
+            padding: 60px 40px 72px;
+            margin-top: 24px;
+            box-shadow: 0 12px 28px -8px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            right: -50px;
+            top: -40px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(100,140,210,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero h1 {
+            font-size: 2.6rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            line-height: 1.25;
+            margin-bottom: 20px;
+            max-width: 700px;
+        }
+
+        .hero h1 span {
+            display: inline-block;
+            background: #3a5d7d;
+            padding: 0 10px;
+            border-radius: 6px;
+            font-weight: 450;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: #c5d3e6;
+            max-width: 680px;
+            margin-bottom: 24px;
+        }
+
+        .hero .tagline {
+            font-size: 1rem;
+            color: #8ba9d4;
+            border-left: 4px solid #557dae;
+            padding-left: 18px;
+            margin-top: 16px;
+            opacity: 0.9;
+        }
+
+        /* ---------- 卡片区域 ---------- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin: 40px 0 48px;
+        }
+
+        @media (max-width: 720px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            .hero {
+                padding: 40px 24px 56px;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 32px 30px 36px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.02);
+            transition: transform 0.2s ease, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 30px rgba(0, 20, 50, 0.08), 0 0 0 1px #dde3ed;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #152b42;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card h2 i {
+            font-style: normal;
+            display: inline-block;
+            width: 8px;
+            height: 24px;
+            background: #3e6a97;
+            border-radius: 6px;
+            margin-right: 6px;
+        }
+
+        .card p, .card li {
+            color: #2a3a4e;
+            line-height: 1.7;
+            font-size: 0.98rem;
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card ul li {
+            padding: 6px 0 6px 24px;
+            position: relative;
+        }
+
+        .card ul li::before {
+            content: '·';
+            position: absolute;
+            left: 6px;
+            color: #557dae;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .card .highlight {
+            background: #edf3fb;
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin: 16px 0 0;
+            font-size: 0.95rem;
+            color: #1f3b5a;
+            border-left: 5px solid #557dae;
+        }
+
+        /* ---------- 自然链接段落 与 提示 ---------- */
+        .context-section {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 32px 34px 36px;
+            margin-bottom: 48px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02), 0 0 0 1px #e9edf3;
+        }
+
+        .context-section p {
+            font-size: 1.02rem;
+            line-height: 1.75;
+            color: #1d2f40;
+            margin-bottom: 20px;
+        }
+
+        .context-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .context-section a {
+            color: #2a6b9e;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.15s ease, color 0.15s;
+        }
+
+        .context-section a:hover {
+            border-bottom-color: #2a6b9e;
+            color: #0b3b5e;
+        }
+
+        .faq-note {
+            background: #f2f6fe;
+            border-radius: 20px;
+            padding: 24px 28px;
+            margin-top: 18px;
+            border: 1px solid #dce5f2;
+        }
+
+        .faq-note h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #10273d;
+            margin-bottom: 10px;
+        }
+
+        .faq-note p, .faq-note summary {
+            color: #2c4055;
+            line-height: 1.7;
+        }
+
+        .faq-note details {
+            margin-top: 14px;
+        }
+
+        .faq-note summary {
+            cursor: pointer;
+            font-weight: 490;
+            color: #19446a;
+            padding: 6px 0;
+        }
+
+        .faq-note summary::-webkit-details-marker {
+            color: #3e6a97;
+        }
+
+        .faq-note .answer {
+            padding: 10px 0 4px 16px;
+            border-left: 3px solid #aac1de;
+            margin-left: 4px;
+        }
+
+        /* ---------- 页脚 ---------- */
+        .footer-note {
+            text-align: center;
+            color: #7388a0;
+            font-size: 0.85rem;
+            padding: 20px 0 40px;
+            border-top: 1px solid #dde3ed;
+            margin-top: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        .footer-note a {
+            color: #2a6b9e;
+            text-decoration: none;
+            border-bottom: 1px solid #cbd8e9;
+        }
+
+        .footer-note a:hover {
+            border-bottom-color: #2a6b9e;
+        }
+
+        .spacer {
+            height: 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+    <!-- 深色头图 -->
+    <header class="hero">
+        <h1>在数字中寻找<br>一种脉络与<span>节奏</span></h1>
+        <p>数据本身并不喧哗，但当你将它们排列、对照、回溯，一些隐约的轮廓便浮现出来。信息的价值，恰在于那些安静而有章法的梳理。</p>
+        <div class="tagline">彩经网 · 数据视角下的内容聚合</div>
+    </header>
+
+    <!-- 信息卡片：用途 + 适合人群 -->
+    <div class="cards-grid">
+        <div class="card">
+            <h2><i></i> 用途 · 内容卡片</h2>
+            <p>站内信息围绕多个维度的数据内容展开，从走势整理到指标统计，为日常浏览或研究提供参照。没有多余的渲染，只有结构化的呈现。</p>
+            <ul>
+                <li>历史数据区间与频次归纳</li>
+                <li>常见指标对比及趋势简表</li>
+                <li>多来源交叉索引参考</li>
+            </ul>
+            <div class="highlight">
+                内容形式偏向轻量参考，适合快速浏览或阶段性回溯。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i></i> 适合人群</h2>
+            <p>无论你是刚开始接触数据整理，还是已有自己的分析习惯，这里的内容都提供一种补充视角：</p>
+            <ul>
+                <li>偏好结构化信息浏览的读者</li>
+                <li>对周期性趋势有观察兴趣的人</li>
+                <li>需要数据对照与基础统计参考的爱好者</li>
+            </ul>
+            <p style="margin-top: 14px; color: #1f3b5a; background: #f4f8fe; padding: 10px 16px; border-radius: 14px;">
+                不预设立场，只提供经过梳理的原始材料与基础对比。
+            </p>
+        </div>
+    </div>
+
+    <!-- 自然链接段落 + 提示摘要 -->
+    <section class="context-section">
+        <p>
+            每一次浏览数据，其实都是一次微小的复盘。有人从中寻找长期波动中的共性，有人只是安静地记录和对比。通过 <a href="https://portal-caijingweb.com">彩经网</a> 的内容布局，你可以绕开信息过载的干扰，直接面对整理后的指标与统计。这里没有算法推荐，只有你主动选择查看的图表与数列。
+        </p>
+        <p>
+            页面以卡片和列表为主，避免堆砌，让信息本身成为焦点。你可以按自己的节奏翻阅，也可以将其中数据作为独立分析的起点。在数字时代，保持对原始信息的阅读能力，或许比追逐结论更重要。
+        </p>
+
+        <!-- FAQ 摘要式卡片 -->
+        <div class="faq-note">
+            <h3>一些常见问题 · 简短回答</h3>
+            <details>
+                <summary>这些数据内容的更新频率如何？</summary>
+                <div class="answer">站内数据按固定周期整理，通常保持与公开信息同步，具体页面会标注时间范围。</div>
+            </details>
+            <details>
+                <summary>是否需要注册或登录？</summary>
+                <div class="answer">完全不需要。所有已发布的内容均可直接浏览，无需任何账户。</div>
+            </details>
+            <details>
+                <summary>我可以引用站内的图表或统计吗？</summary>
+                <div class="answer">可以。作为公开参考信息，标注来源即可。建议在引用前核对具体数值的时效性。</div>
+            </details>
+            <p style="margin-top: 20px; font-size: 0.95rem; color: #345a7a;">
+                更多页面细节，可以在 <a href="https://portal-caijingweb.com">彩经网</a> 内逐一查看。内容以实际页面为准，本文仅作概述。
+            </p>
+        </div>
+    </section>
+
+    <footer class="footer-note">
+        基于公开信息整理 · 内容仅供个人参考 · 数据可能有滞后，请以实际页面为准<br>
+        页面概念描述 · 不构成任何投资或决策建议
+    </footer>
+
+    <!-- 极小的装饰性间隔 -->
+    <div class="spacer"></div>
+</div>
+</body>
+</html>
